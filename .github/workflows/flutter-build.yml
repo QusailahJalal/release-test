@@ -1,4 +1,4 @@
-name: Flutter Debug
+name: Flutter Build
 
 on:
   push:
@@ -6,24 +6,39 @@ on:
       - main
 
 jobs:
-  debug:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.2'
+          flutter-version: '3.19.0'
           channel: stable
 
       - name: Flutter Doctor
         run: flutter doctor -v
 
-      - name: Check Flutter Version
-        run: flutter --version
+      - name: Install dependencies
+        run: flutter pub get
 
-      - name: List Project Files
-        run: ls -la
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Build AAB
+        run: flutter build appbundle --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Upload AAB
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.aab
+          path: build/app/outputs/bundle/release/app-release.aab
