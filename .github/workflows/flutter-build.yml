@@ -1,4 +1,4 @@
-name: Flutter Build
+name: Flutter Debug
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
       - main
 
 jobs:
-  build:
+  debug:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Set up Flutter
@@ -22,8 +22,8 @@ jobs:
       - name: Flutter Doctor
         run: flutter doctor -v
 
-      - name: Get dependencies
-        run: flutter pub get
+      - name: Check Flutter Version
+        run: flutter --version
 
-      - name: Build APK
-        run: flutter build apk --release
+      - name: List Project Files
+        run: ls -la
